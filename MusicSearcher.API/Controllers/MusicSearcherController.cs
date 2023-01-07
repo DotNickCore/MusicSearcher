@@ -72,11 +72,11 @@ namespace MusicSearcher.API.Controllers
                 // gets list of albums
                 var albums = Album.GetAlbums().OrderBy(x => x.AlbumArtist.Id);
 
-                // returns album with 
+                // return album when found, otherwise returns empty
                 var result = albums.Where(x => x.AlbumArtist.ArtistName == albumArtistName &&
                                    x.AlbumName.Contains(albumName)).ToList();
 
-                return Ok(JsonSerializer.Serialize(result.First().AlbumName + " Found!"));
+                return Ok(JsonSerializer.Serialize(result));
             }
             catch (Exception ex)
             {
