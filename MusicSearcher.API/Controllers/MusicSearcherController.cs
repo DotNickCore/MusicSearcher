@@ -73,12 +73,6 @@ namespace MusicSearcher.API.Controllers
 
                 var result = albums.Where(x => x.AlbumArtist.ArtistName == albumArtistName &&
                                    x.AlbumName.Contains(albumName)).ToList();
-    //                mycontext.persons
-    //.Where(t =>
-    //    t.Firstname.Contains(search) ||
-    //    t.Lastname.Contains(search) ||
-    //    t.Description.Contains(search))
-    //.ToList();
 
                 return Ok(JsonSerializer.Serialize(result));
             }
