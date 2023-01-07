@@ -49,7 +49,7 @@ namespace MusicSearcher.API.Controllers
             {
                 var albums = Album.GetAlbums().OrderBy(x => x.AlbumArtist.Id);
 
-                // iterate through each artist
+                // iterate through each album
                 foreach (var a in albums)
                 {
                     Console.WriteLine("Id :" + a.Id + ", Album Name: " + a.AlbumName + ", Album Artist: " + a.AlbumArtist.ArtistName);
@@ -69,12 +69,14 @@ namespace MusicSearcher.API.Controllers
         {
             try
             {
+                // gets list of albums
                 var albums = Album.GetAlbums().OrderBy(x => x.AlbumArtist.Id);
 
+                // returns album with 
                 var result = albums.Where(x => x.AlbumArtist.ArtistName == albumArtistName &&
                                    x.AlbumName.Contains(albumName)).ToList();
 
-                return Ok(JsonSerializer.Serialize(result));
+                return Ok(JsonSerializer.Serialize(result.First().AlbumName + " Found!"));
             }
             catch (Exception ex)
             {
