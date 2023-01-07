@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicSearcher.BL.Models;
+using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace MusicSearcher.API.Controllers
@@ -44,15 +47,40 @@ namespace MusicSearcher.API.Controllers
         {
             try
             {
-                var artists = Artist.GetArtists().OrderBy(x => x.Id);
+                var albums = Album.GetAlbums().OrderBy(x => x.AlbumArtist.Id);
 
                 // iterate through each artist
-                foreach (var a in artists)
+                foreach (var a in albums)
                 {
-                    Console.WriteLine("Id :" + a.Id + ", Name: " + a.ArtistName);
+                    Console.WriteLine("Id :" + a.Id + ", Album Name: " + a.AlbumName + ", Album Artist: " + a.AlbumArtist.ArtistName);
                 }
 
-                return Ok(JsonSerializer.Serialize(artists));
+                return Ok(JsonSerializer.Serialize(albums));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public ActionResult<string> FindAlbum(string albumName, string albumArtistName)
+        {
+            try
+            {
+                var albums = Album.GetAlbums().OrderBy(x => x.AlbumArtist.Id);
+
+                var result = albums.Where(x => x.AlbumArtist.ArtistName == albumArtistName &&
+                                   x.AlbumName.Contains(albumName)).ToList();
+    //                mycontext.persons
+    //.Where(t =>
+    //    t.Firstname.Contains(search) ||
+    //    t.Lastname.Contains(search) ||
+    //    t.Description.Contains(search))
+    //.ToList();
+
+                return Ok(JsonSerializer.Serialize(result));
             }
             catch (Exception ex)
             {
